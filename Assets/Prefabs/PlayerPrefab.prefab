@@ -128,6 +128,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
   _prefabBall: {fileID: 4641959251873136023, guid: eea5df2619b3b1242a4282e7e57fe7f9, type: 3}
+  _prefabPhysxBall: {fileID: 3633274020292845706, guid: bae00fdb7ef2a0c4989fdbab96b44260, type: 3}
 --- !u!1 &8143280744230956786
 GameObject:
   m_ObjectHideFlags: 0
