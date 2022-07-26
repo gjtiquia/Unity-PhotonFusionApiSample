@@ -1,4 +1,4 @@
-# Unity-PhotonFusionApiSample
+# Unity - Photon Fusion Api Sample
 
 Learning how to use Photon Fusion to implement multiplayer in Unity.
 
