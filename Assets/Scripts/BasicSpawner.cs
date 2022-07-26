@@ -8,9 +8,17 @@ using Fusion.Sockets;
 
 public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 {
+    private NetworkRunner _runner;
+
     [SerializeField] private NetworkPrefabRef _playerPrefab;
     private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
-    private NetworkRunner _runner;
+
+    private bool _mouseButton0;
+
+    private void Update()
+    {
+        _mouseButton0 = _mouseButton0 | Input.GetMouseButton(0);
+    }
 
     async void StartGame(GameMode mode)
     {
@@ -80,6 +88,10 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 
         if (Input.GetKey(KeyCode.D))
             data.direction += Vector3.right;
+
+        if (_mouseButton0)
+            data.buttons |= NetworkInputData.MOUSEBUTTON1;
+        _mouseButton0 = false;
 
         input.Set(data);
     }
