@@ -1,5 +1,6 @@
 using Fusion;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : NetworkBehaviour
 {
@@ -12,6 +13,8 @@ public class Player : NetworkBehaviour
 
     [Networked(OnChanged = nameof(OnBallSpawned))]
     public NetworkBool spawned { get; set; }
+
+    private Text _messages;
 
     private Material _material;
     Material material
@@ -30,9 +33,19 @@ public class Player : NetworkBehaviour
         _forward = transform.forward;
     }
 
+    // Called by Unity like Update(), not by Fusion simulation
+    // Run here instead of Update bcs guaranteed to run after FixedUpdateNetwork()
     public override void Render()
     {
         material.color = Color.Lerp(material.color, Color.blue, Time.deltaTime);
+    }
+
+    private void Update()
+    {
+        if (Object.HasInputAuthority && Input.GetKeyDown(KeyCode.R))
+        {
+            RPC_SendMessage("Hey Mate!");
+        }
     }
 
     public static void OnBallSpawned(Changed<Player> changed)
@@ -83,5 +96,17 @@ public class Player : NetworkBehaviour
                 }
             }
         }
+    }
+
+    [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
+    public void RPC_SendMessage(string message, RpcInfo info = default)
+    {
+        if (_messages == null)
+            _messages = FindObjectOfType<Text>();
+        if (info.IsInvokeLocal)
+            message = $"You said: {message}\n";
+        else
+            message = $"Some other player said: {message}\n";
+        _messages.text += message;
     }
 }
